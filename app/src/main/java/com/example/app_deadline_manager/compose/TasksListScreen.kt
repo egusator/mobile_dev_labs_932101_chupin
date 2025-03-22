@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
  import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.app_deadline_manager.compose.create_task.TaskViewModel
+import com.example.app_deadline_manager.compose.create_task.TaskViewForUi
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -32,11 +32,11 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TasksListScreen(
     modifier: Modifier = Modifier,
-    initialContent: List<TaskViewModel>,
+    initialContent: List<TaskViewForUi>,
     navController: NavController
 ) {
     var taskList by remember { mutableStateOf(initialContent) }
-    var taskToRemove by remember { mutableStateOf<TaskViewModel?>(null) }
+    var taskToRemove by remember { mutableStateOf<TaskViewForUi?>(null) }
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -126,7 +126,7 @@ fun TasksListScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TaskItem(task: TaskViewModel, onClick: () -> Unit, onDoubleClick: () -> Unit) {
+fun TaskItem(task: TaskViewForUi, onClick: () -> Unit, onDoubleClick: () -> Unit) {
     var lastClickTime by remember { mutableStateOf(0L) }
 
     Card(

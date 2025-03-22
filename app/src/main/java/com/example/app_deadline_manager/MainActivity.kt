@@ -20,7 +20,7 @@ import com.example.app_deadline_manager.compose.TasksListScreen
 import com.example.app_deadline_manager.compose.create_periodic.CreatePeriodicTaskScreen
 import com.example.app_deadline_manager.compose.create_periodic.CreatePeriodicTaskViewModel
 import com.example.app_deadline_manager.compose.create_task.CreateTaskScreen
-import com.example.app_deadline_manager.compose.create_task.TaskViewModel
+import com.example.app_deadline_manager.compose.create_task.TaskViewForUi
 import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
                 val navController = rememberNavController()
 
-                var createTaskViewModel = TaskViewModel ()
+                var createTaskViewModel = TaskViewForUi ()
 
                 var createPeriodicTaskViewModel = CreatePeriodicTaskViewModel()
 
@@ -124,9 +124,9 @@ class MainActivity : AppCompatActivity() {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getTestTasks(): List<TaskViewModel> {
+fun getTestTasks(): List<TaskViewForUi> {
     return listOf(
-        TaskViewModel(
+        TaskViewForUi(
             taskName = "name1",
             description = "description1",
             deadline = LocalDate.now().plusDays(2),
@@ -134,7 +134,7 @@ fun getTestTasks(): List<TaskViewModel> {
             hours = 0,
             minutes = 30
         ),
-        TaskViewModel(
+        TaskViewForUi(
             taskName = "name2",
             description = "description2",
             deadline = LocalDate.now().plusDays(1),
@@ -142,7 +142,7 @@ fun getTestTasks(): List<TaskViewModel> {
             hours = 2,
             minutes = 0
         ),
-        TaskViewModel(
+        TaskViewForUi(
             taskName = "name3",
             description = "description3",
             deadline = LocalDate.now(),
@@ -150,7 +150,7 @@ fun getTestTasks(): List<TaskViewModel> {
             hours = 0,
             minutes = 10
         ),
-        TaskViewModel(
+        TaskViewForUi(
             taskName = "name4",
             description = "description4",
             deadline = LocalDate.now().plusDays(3),
@@ -158,7 +158,7 @@ fun getTestTasks(): List<TaskViewModel> {
             hours = 0,
             minutes = 45
         ),
-        TaskViewModel(
+        TaskViewForUi(
             taskName = "name5",
             description = "description5",
             deadline = LocalDate.now().plusDays(5),

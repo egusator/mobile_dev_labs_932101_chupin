@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.app_deadline_manager.model.TaskViewModel
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -21,7 +22,8 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CreateTaskScreen(modifier: Modifier = Modifier, createTaskViewModel: TaskViewModel) {
+fun CreateTaskScreen(modifier: Modifier = Modifier,
+                     createTaskViewModel: TaskViewModel) {
     val tabs = listOf("что.", "инфо.", "готово.")
     var selectedTabIndex by remember { mutableStateOf(0) }
 

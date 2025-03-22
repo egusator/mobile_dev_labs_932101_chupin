@@ -1,11 +1,9 @@
-package com.example.app_deadline_manager.compose.create_task
+package com.example.app_deadline_manager.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import java.time.LocalDate
+import kotlin.compareTo
 
 @RequiresApi(Build.VERSION_CODES.O)
 data class TaskViewModel(
@@ -14,7 +12,8 @@ data class TaskViewModel(
     var deadline: LocalDate = LocalDate.now(),
     var priority: String = "",
     var hours: Int = 0,
-    var minutes: Int = 0
+    var minutes: Int = 0,
+    var spentTime: Int = 0, //minutes
 ) {
     fun timeEstimate(): String {
         val hoursPart = if (hours > 0) "$hours ч" else ""
