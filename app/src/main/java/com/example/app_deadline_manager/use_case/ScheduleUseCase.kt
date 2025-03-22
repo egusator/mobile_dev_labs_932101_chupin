@@ -15,7 +15,8 @@ class ScheduleUseCase(
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getScheduleForDate(date: LocalDate): List<TaskForScheduleModel> {
-        val existingTasks = taskForScheduleRepository.findByDate(date) // Проверяем, есть ли уже задачи
+        val existingTasks =
+            taskForScheduleRepository.findByDate(date) // Проверяем, есть ли уже задачи
         if (existingTasks.isNotEmpty()) {
             return existingTasks // Если задачи есть, просто возвращаем их
         }
@@ -27,21 +28,19 @@ class ScheduleUseCase(
         for (periodicTask in periodicTasks) {
             for (workPeriod in periodicTask.workPeriods) {
                 if (workPeriod.day == dayOfWeek) {
-                    taskForScheduleList.add(
+                    var taskToSave =
                         TaskForScheduleModel(
-                            id = taskForScheduleRepository.getNextId(), // Теперь ID всегда уникальный
+                            id = taskForScheduleRepository.getNextId(),
                             taskId = null,
                             periodicTaskId = periodicTask.id,
                             workStart = workPeriod.startTime,
                             workEnd = workPeriod.endTime,
                             date = date
                         )
-                    )
+                    taskForScheduleRepository.save(taskToSave)
                 }
             }
         }
-
-         taskForScheduleRepository.saveAll(taskForScheduleList)
 
         return taskForScheduleList
     }
@@ -80,7 +79,9 @@ class ScheduleUseCase(
         start2: LocalTime,
         end2: LocalTime
     ): Boolean {
-        return (start1.isBefore(end2) && end1.isAfter(start2)) || (start2.isBefore(end1) && end2.isAfter(start1))
+        return (start1.isBefore(end2) && end1.isAfter(start2)) || (start2.isBefore(end1) && end2.isAfter(
+            start1
+        ))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -102,4 +103,17 @@ class ScheduleUseCase(
     suspend fun removeTask(taskId: Int?) {
         taskForScheduleRepository.removeTaskForSchedule(taskId)
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getAllTasksForChoose(): List<TaskForChoose> {
+        return taskRepository.findAll().map { task ->
+            TaskForChoose(
+                id = task.id,
+                name = task.name
+            )
+        }
+    }
 }
+data class TaskForChoose(
+    val id: Int,
+    val name: String
+)

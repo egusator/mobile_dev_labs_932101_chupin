@@ -41,7 +41,7 @@ class TaskForScheduleRepository {
         return tasksForSchedule.removeIf { it.id == id }
     }
 
-    fun saveAll(tasks: List<TaskForScheduleModel>) {
-        tasksForSchedule.addAll(tasks)
+    fun save(task: TaskForScheduleModel) {
+        tasksForSchedule.add(task)
     }
 }
