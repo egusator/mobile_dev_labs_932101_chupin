@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import java.time.DayOfWeek
 import java.time.LocalTime
 
 
@@ -17,7 +18,7 @@ class CreatePeriodicTaskViewModel : ViewModel() {
             "Не указано"
         } else {
             workPeriods.sortedBy { it.day.ordinal }
-                .joinToString("\n") { "${it.day.displayName}: ${it.startTime} - ${it.endTime}" }
+                .joinToString("\n") { "${it.day.name}: ${it.startTime} - ${it.endTime}" }
         }
     }
 }

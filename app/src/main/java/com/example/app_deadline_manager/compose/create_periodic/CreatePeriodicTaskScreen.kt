@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import java.time.DayOfWeek
 import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -130,15 +131,6 @@ fun FillInfo(viewModel: CreatePeriodicTaskViewModel) {
     }
 }
 
-enum class DayOfWeek(val displayName: String) {
-    MONDAY("Понедельник"),
-    TUESDAY("Вторник"),
-    WEDNESDAY("Среда"),
-    THURSDAY("Четверг"),
-    FRIDAY("Пятница"),
-    SATURDAY("Суббота"),
-    SUNDAY("Воскресенье")
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -200,7 +192,7 @@ fun WorkPeriodItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = period.day.displayName, style = MaterialTheme.typography.titleMedium)
+            Text(text = period.day.toString(), style = MaterialTheme.typography.titleMedium)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -266,7 +258,7 @@ fun AddPeriodButton(
                         onAddPeriod(WorkPeriod(day, LocalTime.of(9, 0), LocalTime.of(18, 0)))
                         expanded = false
                     },
-                    text = { Text(day.displayName) } // <-- Добавлен text
+                    text = { Text(day.toString()) } // <-- Добавлен text
                 )
             }
         }

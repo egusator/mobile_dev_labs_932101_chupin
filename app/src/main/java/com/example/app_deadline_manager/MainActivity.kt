@@ -1,5 +1,7 @@
 package com.example.app_deadline_manager
 
+import ScheduleUseCase
+import ScheduleViewModel
 import android.os.Build
 import android.os.Bundle
 import android.view.Window
@@ -10,18 +12,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.app_deadline_manager.compose.RegistrationScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.app_deadline_manager.compose.SettingsScreen
-import com.example.app_deadline_manager.compose.TasksListScreen
+import com.example.app_deadline_manager.compose.schedule.TasksScheduleScreen
 import com.example.app_deadline_manager.compose.create_periodic.CreatePeriodicTaskScreen
 import com.example.app_deadline_manager.compose.create_periodic.CreatePeriodicTaskViewModel
-import com.example.app_deadline_manager.compose.create_task.CreateTaskScreen
-import com.example.app_deadline_manager.compose.create_task.TaskViewForUi
-import java.time.LocalDate
+import com.example.app_deadline_manager.mapper.TaskForScheduleMapper
+import com.example.app_deadline_manager.model.TaskModel
+import com.example.app_deadline_manager.repository.PeriodicTaskRepository
+import com.example.app_deadline_manager.repository.TaskForScheduleRepository
+import com.example.app_deadline_manager.repository.TaskRepository
 
 class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -34,9 +39,18 @@ class MainActivity : AppCompatActivity() {
 
                 val navController = rememberNavController()
 
-                var createTaskViewModel = TaskViewForUi ()
+                var createTaskViewModel = null
 
                 var createPeriodicTaskViewModel = CreatePeriodicTaskViewModel()
+
+                var taskRepository = TaskRepository()
+
+                var periodicTaskRepository = PeriodicTaskRepository()
+
+                var taskForScheduleRepository = TaskForScheduleRepository()
+
+                var scheduleUseCase = ScheduleUseCase(taskForScheduleRepository, periodicTaskRepository, taskRepository)
+                val taskMapper = remember { TaskForScheduleMapper(taskRepository, periodicTaskRepository) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) {
                     paddingValues ->
@@ -62,28 +76,19 @@ class MainActivity : AppCompatActivity() {
                                     TasksAppTopBar(Modifier.fillMaxWidth(), "Список задач", navController)
                                 }
                             ) { paddingValues ->
-                                TasksListScreen(
+                                TasksScheduleScreen(
                                     Modifier
                                         .padding(paddingValues)
                                         .fillMaxSize(),
-                                    initialContent = getTestTasks(),
-                                    navController
+                                    navController,
+                                    ScheduleViewModel(scheduleUseCase),
+                                    taskMapper
                                 )
                             }
                         }
 
                         composable ("Создание задачи") {
-                            Scaffold(
-                                modifier = Modifier.fillMaxSize(),
-                                topBar = {
-                                    TasksAppTopBar(Modifier.fillMaxWidth(), "Создание задачи", navController)
-                                }
-                            ) { paddingValues ->
-                                CreateTaskScreen(
-                                    Modifier.padding(paddingValues).fillMaxSize(),
-                                    createTaskViewModel = createTaskViewModel
-                                )
-                            }
+
                         }
 
                         composable ("Создание повторяющейся задачи") {
@@ -123,48 +128,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getTestTasks(): List<TaskViewForUi> {
-    return listOf(
-        TaskViewForUi(
-            taskName = "name1",
-            description = "description1",
-            deadline = LocalDate.now().plusDays(2),
-            priority = "Высокий",
-            hours = 0,
-            minutes = 30
-        ),
-        TaskViewForUi(
-            taskName = "name2",
-            description = "description2",
-            deadline = LocalDate.now().plusDays(1),
-            priority = "Средний",
-            hours = 2,
-            minutes = 0
-        ),
-        TaskViewForUi(
-            taskName = "name3",
-            description = "description3",
-            deadline = LocalDate.now(),
-            priority = "Низкий",
-            hours = 0,
-            minutes = 10
-        ),
-        TaskViewForUi(
-            taskName = "name4",
-            description = "description4",
-            deadline = LocalDate.now().plusDays(3),
-            priority = "Средний",
-            hours = 0,
-            minutes = 45
-        ),
-        TaskViewForUi(
-            taskName = "name5",
-            description = "description5",
-            deadline = LocalDate.now().plusDays(5),
-            priority = "Высокий",
-            hours = 3,
-            minutes = 0
-        )
-    )
-}
