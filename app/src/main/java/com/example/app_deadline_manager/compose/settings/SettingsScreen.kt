@@ -1,11 +1,9 @@
-package com.example.app_deadline_manager.compose
+package com.example.app_deadline_manager.compose.settings
 
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Build
-import android.widget.TimePicker
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,16 +15,15 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
-    var email by remember { mutableStateOf("") }
-    var isPushEnabled by remember { mutableStateOf(false) }
-    var isEmailNotificationsEnabled by remember { mutableStateOf(false) }
-
-    var workStartTime by remember { mutableStateOf(LocalTime.of(9, 0)) }
-    var workEndTime by remember { mutableStateOf(LocalTime.of(18, 0)) }
-
+fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier = Modifier) {
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
+
+    val email by viewModel.email
+    val isPushEnabled by viewModel.isPushEnabled
+    val isEmailNotificationsEnabled by viewModel.isEmailNotificationsEnabled
+    val workStartTime by viewModel.workStartTime
+    val workEndTime by viewModel.workEndTime
 
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val context = LocalContext.current
@@ -34,29 +31,33 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(16.dp)) {
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { viewModel.updateEmail(it) },
             label = { Text("Электронная почта") },
             modifier = Modifier.fillMaxWidth()
         )
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
         ) {
             Checkbox(
                 checked = isPushEnabled,
-                onCheckedChange = { isPushEnabled = it }
+                onCheckedChange = { viewModel.togglePushNotifications() }
             )
             Text("Отправлять push-уведомления", modifier = Modifier.padding(start = 8.dp))
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
         ) {
             Checkbox(
                 checked = isEmailNotificationsEnabled,
-                onCheckedChange = { isEmailNotificationsEnabled = it }
+                onCheckedChange = { viewModel.toggleEmailNotifications() }
             )
             Text("Отправлять уведомления по электронной почте", modifier = Modifier.padding(start = 8.dp))
         }
@@ -87,14 +88,14 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
     // TimePicker диалоги
     if (showStartTimePicker) {
         showTimePicker(context, workStartTime) { newTime ->
-            workStartTime = newTime
+            viewModel.updateWorkStartTime(newTime)
             showStartTimePicker = false
         }
     }
 
     if (showEndTimePicker) {
         showTimePicker(context, workEndTime) { newTime ->
-            workEndTime = newTime
+            viewModel.updateWorkEndTime(newTime)
             showEndTimePicker = false
         }
     }
@@ -110,7 +111,7 @@ fun showTimePicker(
     val hour = initialTime.hour
     val minute = initialTime.minute
 
-    val timePickerDialog = TimePickerDialog(
+    TimePickerDialog(
         context,
         { _, selectedHour: Int, selectedMinute: Int ->
             onTimeSelected(LocalTime.of(selectedHour, selectedMinute))
@@ -118,6 +119,5 @@ fun showTimePicker(
         hour,
         minute,
         true // true = 24-часовой формат
-    )
-    timePickerDialog.show()
+    ).show()
 }

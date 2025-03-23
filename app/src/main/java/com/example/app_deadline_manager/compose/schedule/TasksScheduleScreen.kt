@@ -149,7 +149,7 @@ fun TasksScheduleScreen(
                 val schedule = (scheduleState as ScheduleState.Loaded).schedule
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(schedule, key = { it.id }) { task ->
+                    items(schedule, key = { it.id ?: it.hashCode() }){ task ->
                         TaskItem(
                             task = task,
                             onClick = {},

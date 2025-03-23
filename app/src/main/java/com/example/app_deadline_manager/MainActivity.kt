@@ -14,17 +14,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.app_deadline_manager.compose.RegistrationScreen
 import androidx.navigation.compose.rememberNavController
-import com.example.app_deadline_manager.compose.SettingsScreen
+import com.example.app_deadline_manager.compose.settings.SettingsScreen
 import com.example.app_deadline_manager.compose.schedule.TasksScheduleScreen
 import com.example.app_deadline_manager.compose.create_periodic.CreatePeriodicTaskScreen
 import com.example.app_deadline_manager.compose.create_periodic.CreatePeriodicTaskViewModel
+import com.example.app_deadline_manager.compose.settings.SettingsViewModel
 import com.example.app_deadline_manager.mapper.TaskForScheduleMapper
-import com.example.app_deadline_manager.model.TaskModel
 import com.example.app_deadline_manager.repository.PeriodicTaskRepository
+import com.example.app_deadline_manager.repository.SettingsRepository
 import com.example.app_deadline_manager.repository.TaskForScheduleRepository
 import com.example.app_deadline_manager.repository.TaskRepository
 
@@ -48,6 +50,9 @@ class MainActivity : AppCompatActivity() {
                 var periodicTaskRepository = PeriodicTaskRepository()
 
                 var taskForScheduleRepository = TaskForScheduleRepository()
+                val context = LocalContext.current
+                val settingsRepository = remember { SettingsRepository(context) }
+                val settingsViewModel = remember { SettingsViewModel(settingsRepository) }
 
                 var scheduleUseCase = ScheduleUseCase(taskForScheduleRepository, periodicTaskRepository, taskRepository)
                 val taskMapper = remember { TaskForScheduleMapper(taskRepository, periodicTaskRepository) }
@@ -115,9 +120,10 @@ class MainActivity : AppCompatActivity() {
                                 }
                             ) { paddingValues ->
                                 SettingsScreen(
+                                    settingsViewModel,
                                     Modifier
                                         .padding(paddingValues)
-                                        .fillMaxSize(),
+                                        .fillMaxSize()
                                 )
                             }
                         }
