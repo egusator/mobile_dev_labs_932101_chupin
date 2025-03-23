@@ -8,7 +8,7 @@ import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 data class TaskForScheduleModel(
-    var id: Int,
+    var id: Int?,
     var taskId: Int?,
     var periodicTaskId: Int?,
     var workStart: LocalTime,

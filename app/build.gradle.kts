@@ -45,7 +45,7 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.navigation.compose)    // Choose one of the following:
+    implementation(libs.androidx.navigation.compose)
     // Material Design 3
     implementation(libs.androidx.material3)
     // Android Studio Preview support
@@ -53,9 +53,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     // Optional - Integration with activities
     implementation(libs.androidx.activity.compose)
-
-    // Другие зависимости
-    implementation(libs.androidx.core.ktx)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10")
+     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

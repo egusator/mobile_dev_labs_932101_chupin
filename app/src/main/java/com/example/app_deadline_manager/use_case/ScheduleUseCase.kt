@@ -30,14 +30,14 @@ class ScheduleUseCase(
                 if (workPeriod.day == dayOfWeek) {
                     var taskToSave =
                         TaskForScheduleModel(
-                            id = taskForScheduleRepository.getNextId(),
+                            id = null,
                             taskId = null,
                             periodicTaskId = periodicTask.id,
                             workStart = workPeriod.startTime,
                             workEnd = workPeriod.endTime,
                             date = date
                         )
-                    taskForScheduleRepository.save(taskToSave)
+                    taskForScheduleRepository.addTaskForSchedule(taskToSave)
                 }
             }
         }
@@ -60,7 +60,7 @@ class ScheduleUseCase(
         }
 
         val newTaskForSchedule = TaskForScheduleModel(
-            id = taskForScheduleRepository.findAll().size + 1,
+            id = null,
             taskId = taskId,
             periodicTaskId = null,
             workStart = workStart,
